@@ -1,10 +1,14 @@
 import React from 'react';
+
 import './TeslaBattery.css';
+
 import TeslaNotice from '../components/TeslaNotice/TeslaNotice'
 import TeslaCar from '../components/TeslaCar/TeslaCar'
 import TeslaStats from '../components/TeslaStats/TeslaStats'
 import TeslaCounter from '../components/TeslaCounter/TeslaCounter'
-import { getModelData } from '../services/BatteryService';
+import TeslaClimate from '../components/TeslaClimate/TeslaClimate'
+
+import { getModelData } from '../services/BatteryService'
 
 
 
@@ -25,6 +29,7 @@ class TeslaBattery extends React.Component {
    this.increment = this.increment.bind(this);
    this.decrement = this.decrement.bind(this);
    this.updateCounterState = this.updateCounterState.bind(this);
+   this.handleChangeClimate = this.handleChangeClimate.bind(this);
   }
 
   componentDidMount() {
@@ -94,7 +99,11 @@ updateCounterState(title, newValue) {
       this.updateCounterState(title, newValue);
     }
   }  
-
+handleChangeClimate() {
+  const config = {...this.state.config};
+  config['climate'] = !this.state.config.climate;
+  this.setState({ config });
+}
 
   render() {
   	const { config, carstats } = this.state;
@@ -117,7 +126,13 @@ updateCounterState(title, newValue) {
               increment={this.increment}
               decrement={this.decrement}
             />
+            <TeslaClimate
+            value={this.state.config.climate}
+            limit={this.state.config.temperature > 10}
+            handleChangeClimate={this.handleChangeClimate}
+          />
           </div>
+            
         </div>
         <TeslaNotice/>
       </form>
